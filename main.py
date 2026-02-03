@@ -1,5 +1,6 @@
 catatan = []
 target_harian = None  # Menyimpan target harian dalam menit
+pengingat = []  # Menyimpan pengingat belajar untuk ujian
 
 def tambah_catatan():
     print("\n--- Tambah Catatan Belajar ---")
@@ -115,6 +116,63 @@ def lihat_target():
         else:
             print(f"Sisa: {sisa} menit")
 
+def tambah_pengingat():
+    print("\n--- Tambah Pengingat Belajar Ujian ---")
+    
+    # Meminta input dari pengguna
+    mapel = input("Masukkan mata pelajaran (penting untuk ujian): ")
+    materi = input("Masukkan materi/bab yang harus dipelajari: ")
+    
+    # Menyimpan data pengingat
+    data_pengingat = {
+        "mapel": mapel,
+        "materi": materi,
+        "status": "Belum dipelajari"
+    }
+    
+    pengingat.append(data_pengingat)
+    print(f"✓ Pengingat '{mapel}' - '{materi}' berhasil ditambahkan!")
+
+def lihat_pengingat():
+    print("\n--- Pengingat Belajar Ujian ---")
+    
+    # Cek apakah ada pengingat
+    if not pengingat:
+        print("Belum ada pengingat. Tambahkan pengingat untuk fokus belajar ujian!")
+        return
+    
+    # Tampilkan semua pengingat dengan format rapi
+    print(f"\n{'No':<4} {'Mapel':<20} {'Materi/Bab':<35} {'Status':<20}")
+    print("-" * 80)
+    
+    for i, data in enumerate(pengingat, 1):
+        mapel = data["mapel"]
+        materi = data["materi"]
+        status = data["status"]
+        print(f"{i:<4} {mapel:<20} {materi:<35} {status:<20}")
+    
+    print("-" * 80)
+    print("\n💡 Tips: Tandai materi yang sudah dipelajari untuk tracking progress!")
+
+def tandai_pengingat():
+    print("\n--- Tandai Materi Sudah Dipelajari ---")
+    
+    if not pengingat:
+        print("Belum ada pengingat untuk ditandai.")
+        return
+    
+    lihat_pengingat()
+    
+    try:
+        nomor = int(input("\nNomor pengingat yang sudah dipelajari: "))
+        if 1 <= nomor <= len(pengingat):
+            pengingat[nomor - 1]["status"] = "✓ Sudah dipelajari"
+            print(f"✓ '{pengingat[nomor - 1]['materi']}' ditandai sebagai sudah dipelajari!")
+        else:
+            print("Nomor pengingat tidak valid!")
+    except ValueError:
+        print("Input tidak valid! Masukkan nomor.")
+
 def menu():
     print("\n=== Study Log App ===")
     print("1. Tambah catatan belajar")
@@ -122,7 +180,10 @@ def menu():
     print("3. Total waktu belajar")
     print("4. Set target harian")
     print("5. Lihat target harian")
-    print("6. Keluar")
+    print("6. Tambah pengingat ujian")
+    print("7. Lihat pengingat ujian")
+    print("8. Tandai materi sudah dipelajari")
+    print("9. Keluar")
 
 while True:
     menu()
@@ -139,6 +200,12 @@ while True:
     elif pilihan == "5":
         lihat_target()
     elif pilihan == "6":
+        tambah_pengingat()
+    elif pilihan == "7":
+        lihat_pengingat()
+    elif pilihan == "8":
+        tandai_pengingat()
+    elif pilihan == "9":
         print("Terima kasih, terus semangat belajar!")
         break
     else:
